@@ -1,0 +1,163 @@
+<html>
+    <head>
+        <title>WebSocket Echo Client</title>
+    </head>
+    <style type="text/css">
+		#content {
+		   width:98%;
+		   margin:0 auto;
+		}
+		#left_col{
+			float:left;
+		}
+		#right_col{
+			float: left;
+			margin-left:20px;
+			padding-left:20px;
+			width:350px;
+			border-left: solid 1px #cccccc;
+		}		
+		body {
+		    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+		    font-size: 14px;
+		    line-height: 1.42857143;
+		    color: #333;
+		    background-color: #fff;
+		}
+		button {
+		    vertical-align: baseline;
+		    font-size: 90%;
+		    font-weight: 700;
+		    color: #333;
+		    border-color: #ccc;
+		    border-width: 1px;
+		    border-style: solid !important;
+		    margin-top: 5px;
+		    padding: 2px 6px 3px;
+		}
+	</style>
+    <body>
+        <h1>WebSocket Echo Client</h1>
+        
+        <div id="content">
+		    <div id="left_col">
+		    	<strong>Websocket URL:</strong>
+            	<br/>
+            	<input type="text" id="urlInputText" readonly/>
+            	</br>	
+            	</br>	
+		        <button onClick="initWebSocket();">Connect</button>
+            	<button onClick="stopWebSocket();">Disconnect</button>
+            	<button onClick="checkSocket();">State</button>
+            	<br/>
+            	<br/>
+            	<strong>Message:</strong>
+            	<br/>
+            	<input type="text" id="inputText" onkeydown="if(event.keyCode==13)sendMessage();"/>
+            	<button onClick="sendMessage();">Send</button>
+		    </div>
+		    <div id="right_col">
+		    	<strong>Log:</strong>
+            	<br/>
+		        <textarea id="debugTextArea" style="width:400px;height:200px;" readonly></textarea>
+		    </div>
+		</div>
+
+        <script type="text/javascript">
+            var debugTextArea = document.getElementById("debugTextArea");
+            
+            var wsUri = "ws://localhost:8090/websocket/echo";
+            
+            urlInputText.value=wsUri;
+            
+            resizeUrlInputText(urlInputText.value);
+            
+            function resizeUrlInputText(message) {
+                urlInputText.size=message.length;
+            }
+            
+            function debug(message) {
+                debugTextArea.value += message + "\n\n";
+                debugTextArea.scrollTop = debugTextArea.scrollHeight;
+            }
+
+            function sendMessage() {
+                var msg = document.getElementById("inputText").value;
+                if ( websocket != null ){
+                    document.getElementById("inputText").value = "";
+                    websocket.send(msg);
+                    debug("Message sent: " + msg);
+                    console.log( "string sent :", '"'+msg+'"' );
+                }
+                else {
+                	debug("Can't sent message, the connection is not open");
+                }
+            }
+
+            var websocket = null;
+
+            function initWebSocket() {
+                try {
+                    if (typeof MozWebSocket == 'function')
+                        WebSocket = MozWebSocket;
+                    if ( websocket && websocket.readyState == 1 )
+                        websocket.close();
+                    websocket = new WebSocket( wsUri );
+                    websocket.onopen = function (evt) {
+                        debug("CONNECTED");
+                    };
+                    websocket.onclose = function (evt) {
+                        debug("DISCONNECTED");
+                    };
+                    websocket.onmessage = function (evt) {
+                        console.log( "Message received: ", evt.data );
+                        debug( "Message received: " + evt.data );
+                    };
+                    websocket.onerror = function (evt) {
+                        debug('ERROR: ' + evt.data);
+                    };
+                } 
+                catch (exception) {
+                    debug('ERROR: ' + exception);
+                }
+            }
+
+            function stopWebSocket() {
+                if (websocket) {
+                    websocket.close();
+                }
+            }
+
+            function checkSocket() {
+                if (websocket != null) {
+                    var stateStr;
+                    switch (websocket.readyState) {
+                        case 0: {
+                            stateStr = "CONNECTING";
+                            break;
+                        }
+                        case 1: {
+                            stateStr = "OPEN";
+                            break;
+                        }
+                        case 2: {
+                            stateStr = "CLOSING";
+                            break;
+                        }
+                        case 3: {
+                            stateStr = "CLOSED";
+                            break;
+                        }
+                        default: {
+                            stateStr = "UNKNOW";
+                            break;
+                        }
+                    }
+                    debug("WebSocket state = " + websocket.readyState + " ( " + stateStr + " )");
+                } else {
+                    debug("WebSocket is null");
+                }
+            }
+        </script>
+    </body>
+</html>
