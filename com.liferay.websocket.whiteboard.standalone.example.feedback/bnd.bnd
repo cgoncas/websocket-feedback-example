@@ -5,7 +5,8 @@ Bundle-Activator: com.liferay.websocket.whiteboard.standalone.example.feedback.B
 Bundle-Name: Liferay WebSocket Whiteboard Standalone Echo Example
 Bundle-SymbolicName: com.liferay.websocket.whiteboard.standalone.example.feedback
 Bundle-Version: 1.0.0
-Private-Package: com.liferay.websocket.whiteboard.standalone.example.feedback
+Private-Package: com.liferay.websocket.whiteboard.standalone.example.feedback,com.liferay.websocket.whiteboard.standalone.example.feedback.*
+	
 	
 icondata: data:image/gif;base64,${base64;icon.gif}
 
@@ -21,7 +22,8 @@ icondata: data:image/gif;base64,${base64;icon.gif}
 	org.eclipse.jetty.util,\
 	org.eclipse.jetty.websocket.javax.websocket.server,\
 	osgi.cmpn,\
-	osgi.core
+	osgi.core,\
+	org.glassfish.javax.json
 	
 -runrequires: \
 	osgi.identity;filter:='(osgi.identity=osgi.cmpn)',\
@@ -65,7 +67,8 @@ icondata: data:image/gif;base64,${base64;icon.gif}
 	org.eclipse.jetty.webapp,\
 	org.eclipse.jetty.xml,\
 	com.liferay.websocket.whiteboard.standalone.example.feedback,\
-	com.liferay.websocket.api.spifly.fragment;version=latest
+	com.liferay.websocket.api.spifly.fragment;version=latest,\
+	org.glassfish.javax.json
 		
 -runfw: org.apache.felix.framework;version='[5.4.0,5.4.0]'
 -runee: JavaSE-1.8
