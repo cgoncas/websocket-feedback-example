@@ -1,15 +1,24 @@
 package com.liferay.websocket.whiteboard.standalone.example.feedback;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.List;
 
 import javax.servlet.ServletContext;
+import javax.websocket.Decoder;
+import javax.websocket.Encoder;
+import javax.websocket.Endpoint;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+
+import com.liferay.websocket.whiteboard.standalone.example.feedback.chat.MessageDecoder;
+import com.liferay.websocket.whiteboard.standalone.example.feedback.chat.MessageEncoder;
+
 import org.eclipse.jetty.server.Handler;
 
 import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer;
@@ -19,6 +28,11 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.resource.Resource;
 
 public class BundleActivator implements org.osgi.framework.BundleActivator {
+	private ServiceRegistration<ServletContext> servletContextServiceRegistration;
+	
+	private ServiceRegistration<Server> serverServiceRegistration;
+	
+	private ServiceRegistration<Endpoint> websocketServiceRegistration;
 	
 	@Override
 	public void start(BundleContext bundleContext) throws Exception {
@@ -53,6 +67,26 @@ public class BundleActivator implements org.osgi.framework.BundleActivator {
         
         servletContextServiceRegistration =  
         		bundleContext.registerService(ServletContext.class, servletContext, servletContextProps);
+        
+		Dictionary<String, Object> properties = new Hashtable<>();
+
+		List<Class<? extends Decoder>> decoders = new ArrayList<>();
+
+		decoders.add(MessageDecoder.class);
+
+		properties.put("org.osgi.http.websocket.endpoint.decoders", decoders);
+
+		List<Class<? extends Encoder>> encoders = new ArrayList<>();
+		
+		encoders.add(MessageEncoder.class);
+
+		properties.put("org.osgi.http.websocket.endpoint.encoders", encoders);
+
+		properties.put(
+			"org.osgi.http.websocket.endpoint.path", "/websocket/chat");
+
+		websocketServiceRegistration = bundleContext.registerService(
+			Endpoint.class, new ChatWebSocketEndpoint(), properties);
 	}
 
 	@Override
@@ -60,12 +94,9 @@ public class BundleActivator implements org.osgi.framework.BundleActivator {
 		bundleContext.ungetService(serverServiceRegistration.getReference());
 		
 		bundleContext.ungetService(servletContextServiceRegistration.getReference());		
-	}
-	
-	private ServiceRegistration<ServletContext> servletContextServiceRegistration;
-	
-	private ServiceRegistration<Server> serverServiceRegistration;
-	
+		
+		bundleContext.ungetService(websocketServiceRegistration.getReference());	
+	}	
 
 }
 
