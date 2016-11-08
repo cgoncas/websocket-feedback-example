@@ -12,10 +12,6 @@ public class Message {
 	
 	public static final String[] AVATARS = {"avatar-deer", "avatar-bear", "avatar-owl", "avatar-fox", "avatar-dog", "avatar-bird", "avatar-bee", "avatar-panda", "avatar-monkey"};
 	
-	public Message(String message) {
-		type = message;
-	}
-	
 	private String content;
     
 	private String sender;
@@ -30,6 +26,10 @@ public class Message {
     
     private String session; 
 	
+	public Message(String message) {
+		type = message;
+	}
+		
     public String getContent() {
 		return content;
 	}

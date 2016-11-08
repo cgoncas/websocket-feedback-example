@@ -11,6 +11,8 @@ import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 
 public class MessageDecoder implements Decoder.Text<Message> {
+	
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("EEE h:mm a"); 
 
     @Override
     public Message decode(final String textMessage) throws DecodeException {
@@ -54,6 +56,4 @@ public class MessageDecoder implements Decoder.Text<Message> {
 		return true;
 	}
 	
-	SimpleDateFormat dateFormat = new SimpleDateFormat("EEE h:mm a"); 
-
 }

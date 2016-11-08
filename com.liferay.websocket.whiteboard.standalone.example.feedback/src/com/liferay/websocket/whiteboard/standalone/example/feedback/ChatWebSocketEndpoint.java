@@ -3,7 +3,6 @@ package com.liferay.websocket.whiteboard.standalone.example.feedback;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,7 +20,7 @@ import com.liferay.websocket.whiteboard.standalone.example.feedback.chat.Peer;
  */
 public class ChatWebSocketEndpoint extends Endpoint {
 
-	static Map<Session, Peer> peers = new ConcurrentHashMap<>();
+	private static Map<Session, Peer> peers = new ConcurrentHashMap<>();
 
 	@Override
 	public void onOpen(final Session session, EndpointConfig endpointConfig) {		

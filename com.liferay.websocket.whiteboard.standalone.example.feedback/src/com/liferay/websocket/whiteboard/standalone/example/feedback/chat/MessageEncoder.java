@@ -10,6 +10,8 @@ import java.util.Date;
 import javax.json.Json;
 
 public class MessageEncoder implements Encoder.Text<Message> {
+	
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("EEE h:mm a"); 
 
     @Override
     public String encode(final Message message) throws EncodeException {
@@ -48,6 +50,4 @@ public class MessageEncoder implements Encoder.Text<Message> {
 		// NO OP
 	}
 	
-	SimpleDateFormat dateFormat = new SimpleDateFormat("EEE h:mm a"); 
-
 }
