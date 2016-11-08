@@ -1,5 +1,6 @@
 package com.liferay.websocket.whiteboard.standalone.example.feedback;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -7,10 +8,14 @@ import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.websocket.CloseReason;
+import javax.websocket.EncodeException;
 import javax.websocket.Endpoint;
 import javax.websocket.EndpointConfig;
 import javax.websocket.MessageHandler;
 import javax.websocket.Session;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.liferay.websocket.whiteboard.standalone.example.feedback.chat.Message;
 import com.liferay.websocket.whiteboard.standalone.example.feedback.chat.Peer;
@@ -21,6 +26,8 @@ import com.liferay.websocket.whiteboard.standalone.example.feedback.chat.Peer;
 public class ChatWebSocketEndpoint extends Endpoint {
 
 	private static Map<Session, Peer> peers = new ConcurrentHashMap<>();
+	
+	private static final Logger logger = Logger.getLogger(ChatWebSocketEndpoint.class.getName());
 
 	@Override
 	public void onOpen(final Session session, EndpointConfig endpointConfig) {		
@@ -28,12 +35,7 @@ public class ChatWebSocketEndpoint extends Endpoint {
 
 		String userName = userNames.get(0);
 
-		try {
-			session.getBasicRemote().sendObject(welcomeMessage(userName));
-		} 
-		catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		sendMessage(session, welcomeMessage(userName));
 		
 		Peer peer = new Peer();
 		
@@ -48,37 +50,21 @@ public class ChatWebSocketEndpoint extends Endpoint {
 		Message peerMessage = addPeer(peer);
 
 		for (Peer peerValue : peers.values()) {
-			try {
-				peerValue.getSession().getBasicRemote().sendObject(joinMessage);	
-
-				peerValue.getSession().getBasicRemote().sendObject(peerMessage);	
-
-				session.getBasicRemote().sendObject(addPeer(peerValue));
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
-		}
-
-		try {
-			session.getBasicRemote().sendObject(addPeer(peer));
-		} 
-		catch (Exception e) {
-			throw new RuntimeException(e);
+			sendMessage(peerValue.getSession(), joinMessage);
+			sendMessage(peerValue.getSession(), peerMessage);
+			sendMessage(session, addPeer(peerValue));
 		}
 		
+		sendMessage(session, addPeer(peer));
+
 		peers.put(session, peer);
 		
 		session.addMessageHandler(new MessageHandler.Whole<Message>() {
 
 			@Override
 			public void onMessage(Message message) {
-
 				for (Session peerSession : peers.keySet()) {
-					try {
-						peerSession.getBasicRemote().sendObject(message);
-					} catch (Exception e) {
-						throw new RuntimeException(e);
-					}
+					sendMessage(peerSession, message);
 				}
 			}
 		});
@@ -93,14 +79,20 @@ public class ChatWebSocketEndpoint extends Endpoint {
 		peers.remove(session);
 
 		for (Session peerSession : peers.keySet()) {
-			try {
-				peerSession.getBasicRemote().sendObject(leftMessage(peer.getName() ));
-				
-				peerSession.getBasicRemote().sendObject(removePeer(peer));				
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
+			sendMessage(peerSession, leftMessage(peer.getName()));
 
+			sendMessage(peerSession, removePeer(peer));
+		}
+	}
+	
+	private static void sendMessage(Session session, Message message) {
+		try {
+			session.getBasicRemote().sendObject(message);
+		} 
+		catch (IOException ie) {			
+			logger.log(Level.SEVERE , "Can't send the message " + message, ie);
+		} catch (EncodeException ee) {
+			logger.log(Level.SEVERE , ee.getMessage(), ee);
 		}
 	}
 	
@@ -123,7 +115,6 @@ public class ChatWebSocketEndpoint extends Endpoint {
 
 		return message;
 	}
-
 
 	private static Message welcomeMessage(String userName) {
 		Message message = new Message(Message.MESSAGE);
@@ -154,5 +145,5 @@ public class ChatWebSocketEndpoint extends Endpoint {
 
 		return message;
 	}
-
+	
 }
