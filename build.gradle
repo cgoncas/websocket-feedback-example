@@ -10,8 +10,11 @@ import aQute.bnd.osgi.Constants
 
 /* Add bnd gradle plugin as a script dependency */
 buildscript {
+  repositories {
+    jcenter()
+  }
   dependencies {
-    classpath bndPlugin
+    classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:3.2.0'
   }
 }
 
