@@ -33,9 +33,22 @@ subprojects {
   def bndProject = bndWorkspace.getProject(name)
   if (bndProject != null) {
     plugins.apply 'biz.aQute.bnd'
-  }
+
+     task run(dependsOn: build) << {
+      if (file('generated/distributions/executable/run.jar').exists()) {
+         println 'Running ' + bndProject
+         javaexec { 
+           main="-jar";
+           args = ["generated/distributions/executable/run.jar"]
+         }
+      }
+    }
+  }    
 }
 
 task wrapper(type: Wrapper) {
   jarFile = rootProject.file('.gradle-wrapper/gradle-wrapper.jar')
 }
+
+
+

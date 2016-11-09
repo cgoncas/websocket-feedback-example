@@ -7,7 +7,6 @@ Bundle-SymbolicName: com.liferay.websocket.whiteboard.standalone.example.feedbac
 Bundle-Version: 1.0.0
 Private-Package: com.liferay.websocket.whiteboard.standalone.example.feedback,com.liferay.websocket.whiteboard.standalone.example.feedback.*
 	
-	
 icondata: data:image/gif;base64,${base64;icon.gif}
 
 -includeresource.bundle: META-INF/resources=resources/META-INF/resources
@@ -20,10 +19,12 @@ icondata: data:image/gif;base64,${base64;icon.gif}
 	org.eclipse.jetty.server,\
 	org.eclipse.jetty.servlet,\
 	org.eclipse.jetty.util,\
-	org.eclipse.jetty.websocket.javax.websocket.server,\
 	osgi.cmpn,\
 	osgi.core,\
-	org.glassfish.javax.json
+	org.glassfish.javax.json,\
+	org.eclipse.jetty.websocket.javax.websocket.server,\
+	org.eclipse.jetty.websocket.javax.websocket,\
+	org.eclipse.jetty.websocket.common
 	
 -runrequires: \
 	osgi.identity;filter:='(osgi.identity=osgi.cmpn)',\
@@ -33,42 +34,42 @@ icondata: data:image/gif;base64,${base64;icon.gif}
 	osgi.identity;filter:='(osgi.identity=org.eclipse.jetty.osgi.boot)'
 
 -runbundles: \
-	com.liferay.websocket.whiteboard,\
-	javax.websocket-api,\
 	javax.servlet-api,\
+	javax.websocket-api,\
 	org.apache.aries.spifly.dynamic.bundle,\
 	org.apache.aries.util,\
+	org.objectweb.asm.all.debug,\
 	org.apache.felix.configadmin,\
-	org.apache.felix.http.api,\
 	org.apache.felix.gogo.command,\
 	org.apache.felix.gogo.runtime,\
 	org.apache.felix.gogo.shell,\
 	org.apache.felix.log,\
 	org.apache.felix.scr,\
-	org.objectweb.asm.all.debug,\
-	org.osgi.service.metatype,\
-	org.osgi:org.osgi.service.event,\
+	org.apache.felix.http.servlet-api,\
+	org.apache.felix.metatype,\
+	org.eclipse.jetty.deploy,\
 	org.eclipse.jetty.http,\
 	org.eclipse.jetty.io,\
+	org.eclipse.jetty.jmx,\
 	org.eclipse.jetty.osgi.boot,\
+	org.eclipse.jetty.security,\
 	org.eclipse.jetty.server,\
-	org.eclipse.jetty.servlet,\
-	org.eclipse.jetty.util,\
-	org.eclipse.jetty.websocket.javax.websocket.server,\
 	org.eclipse.jetty.websocket.api,\
 	org.eclipse.jetty.websocket.client,\
 	org.eclipse.jetty.websocket.common,\
-	org.eclipse.jetty.websocket.servlet,\
-	org.eclipse.jetty.jmx,\
-	org.eclipse.jetty.security,\
-	org.eclipse.jetty.deploy,\
-	org.eclipse.jetty.websocket.server,\
 	org.eclipse.jetty.websocket.javax.websocket,\
-	org.eclipse.jetty.webapp,\
+	org.eclipse.jetty.websocket.javax.websocket.server,\
+	org.eclipse.jetty.websocket.server,\
+	org.eclipse.jetty.websocket.servlet,\
 	org.eclipse.jetty.xml,\
-	com.liferay.websocket.whiteboard.standalone.example.feedback,\
-	com.liferay.websocket.api.spifly.fragment;version=latest,\
-	org.glassfish.javax.json
+	org.eclipse.jetty.util,\
+	org.eclipse.jetty.servlet,\
+	org.eclipse.jetty.webapp,\
+	org.osgi.service.event,\
+	org.glassfish.javax.json,\
+	com.liferay.websocket.whiteboard,\
+	com.liferay.websocket.api.spifly.fragment,\
+	com.liferay.websocket.whiteboard.standalone.example.feedback;version=latest
 		
 -runfw: org.apache.felix.framework;version='[5.4.0,5.4.0]'
 -runee: JavaSE-1.8

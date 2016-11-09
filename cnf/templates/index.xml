@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<repository increment="1478186112000" name="Templates" xmlns="http://www.osgi.org/xmlns/repository/v1.0.0">
+<repository increment="1478789495000" name="Templates" xmlns="http://www.osgi.org/xmlns/repository/v1.0.0">
   <resource>
     <capability namespace="osgi.identity">
       <attribute name="osgi.identity" value="org.bndtools.templates.osgi"/>
@@ -108,5 +108,154 @@
       <attribute name="icon" value="data:image/gif;base64,R0lGODlhEQAQAPUvAAAAACQkJUVFR1RVV1VWWGBhY2JjZWNkZm9wcnBxc3R1d3V2eXx9f4eJjIiJjJOVmJianZ6go6CipaiqramrrqyusbO1uLa3urm7vbq8vsbHycfIysjJy8rLzdHS1NTV1tbX2dzd3t7f4e3u7vDw8fLy8/X19fb29vf39/j5+fr6+/v7+/z8/P39/f7+/v///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAADAALAAAAAARABAAAAaMQJhwCAMYiUiicZlEGh3QAqA53LyuV5SCinpBLhGAIvRqvlADwKZQMVrKyFfDuK5IAyO4UINargUbRhF6MBoeSx8HAB9pBy9TRRsfRgKPAA9zBY9CABR9ABhtAA4YAIOQAJoODC9SYhsBKBxHRhxnF0sPHCAvArRGIi8TaQEYXQpMRUYYWFcirlTRQkEAOw=="/>
       <attribute name="help" value="templates/launch/enroute/jpm.xml"/>
     </capability>
+  </resource>
+  <resource>
+    <capability namespace="osgi.identity">
+      <attribute name="osgi.identity" value="org.eclipse.jetty.websocket.javax.websocket"/>
+      <attribute name="type" value="osgi.bundle"/>
+      <attribute name="version" type="Version" value="9.3.10.v20160621"/>
+    </capability>
+    <capability namespace="osgi.content">
+      <attribute name="osgi.content" value="e0e245540335cbe2e5cd63e22f7f1cd385ba6530a88d1cec18af919d0074f14f"/>
+      <attribute name="url" value="org.eclipse.jetty.websocket.javax.websocket/org.eclipse.jetty.websocket.javax.websocket-9.3.10.jar"/>
+      <attribute name="size" type="Long" value="157411"/>
+      <attribute name="mime" value="application/vnd.osgi.bundle"/>
+    </capability>
+    <capability namespace="osgi.wiring.bundle">
+      <attribute name="osgi.wiring.bundle" value="org.eclipse.jetty.websocket.javax.websocket"/>
+      <attribute name="bundle-version" type="Version" value="9.3.10.v20160621"/>
+    </capability>
+    <capability namespace="osgi.wiring.host">
+      <attribute name="osgi.wiring.host" value="org.eclipse.jetty.websocket.javax.websocket"/>
+      <attribute name="bundle-version" type="Version" value="9.3.10.v20160621"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="org.eclipse.jetty.websocket.jsr356"/>
+      <attribute name="version" type="Version" value="9.3.10"/>
+      <attribute name="bundle-symbolic-name" value="org.eclipse.jetty.websocket.javax.websocket"/>
+      <attribute name="bundle-version" type="Version" value="9.3.10.v20160621"/>
+      <directive name="uses" value="javax.websocket,org.eclipse.jetty.io,org.eclipse.jetty.util,org.eclipse.jetty.util.component,org.eclipse.jetty.util.ssl,org.eclipse.jetty.websocket.api,org.eclipse.jetty.websocket.api.extensions,org.eclipse.jetty.websocket.client,org.eclipse.jetty.websocket.client.io,org.eclipse.jetty.websocket.common,org.eclipse.jetty.websocket.common.events,org.eclipse.jetty.websocket.common.scopes,org.eclipse.jetty.websocket.jsr356.endpoints,org.eclipse.jetty.websocket.jsr356.metadata"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="org.eclipse.jetty.websocket.jsr356.annotations"/>
+      <attribute name="version" type="Version" value="9.3.10"/>
+      <attribute name="bundle-symbolic-name" value="org.eclipse.jetty.websocket.javax.websocket"/>
+      <attribute name="bundle-version" type="Version" value="9.3.10.v20160621"/>
+      <directive name="uses" value="javax.websocket,org.eclipse.jetty.websocket.common,org.eclipse.jetty.websocket.common.events.annotated,org.eclipse.jetty.websocket.jsr356,org.eclipse.jetty.websocket.jsr356.metadata"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="org.eclipse.jetty.websocket.jsr356.client"/>
+      <attribute name="version" type="Version" value="9.3.10"/>
+      <attribute name="bundle-symbolic-name" value="org.eclipse.jetty.websocket.javax.websocket"/>
+      <attribute name="bundle-version" type="Version" value="9.3.10.v20160621"/>
+      <directive name="uses" value="javax.websocket,org.eclipse.jetty.websocket.api,org.eclipse.jetty.websocket.common.events,org.eclipse.jetty.websocket.jsr356,org.eclipse.jetty.websocket.jsr356.annotations,org.eclipse.jetty.websocket.jsr356.metadata"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="org.eclipse.jetty.websocket.jsr356.decoders"/>
+      <attribute name="version" type="Version" value="9.3.10"/>
+      <attribute name="bundle-symbolic-name" value="org.eclipse.jetty.websocket.javax.websocket"/>
+      <attribute name="bundle-version" type="Version" value="9.3.10.v20160621"/>
+      <directive name="uses" value="javax.websocket,org.eclipse.jetty.websocket.jsr356.metadata"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="org.eclipse.jetty.websocket.jsr356.encoders"/>
+      <attribute name="version" type="Version" value="9.3.10"/>
+      <attribute name="bundle-symbolic-name" value="org.eclipse.jetty.websocket.javax.websocket"/>
+      <attribute name="bundle-version" type="Version" value="9.3.10.v20160621"/>
+      <directive name="uses" value="javax.websocket,org.eclipse.jetty.websocket.jsr356.metadata"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="org.eclipse.jetty.websocket.jsr356.endpoints"/>
+      <attribute name="version" type="Version" value="9.3.10"/>
+      <attribute name="bundle-symbolic-name" value="org.eclipse.jetty.websocket.javax.websocket"/>
+      <attribute name="bundle-version" type="Version" value="9.3.10.v20160621"/>
+      <directive name="uses" value="javax.websocket,org.eclipse.jetty.websocket.api,org.eclipse.jetty.websocket.api.extensions,org.eclipse.jetty.websocket.common,org.eclipse.jetty.websocket.common.events,org.eclipse.jetty.websocket.jsr356,org.eclipse.jetty.websocket.jsr356.annotations,org.eclipse.jetty.websocket.jsr356.metadata"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="org.eclipse.jetty.websocket.jsr356.messages"/>
+      <attribute name="version" type="Version" value="9.3.10"/>
+      <attribute name="bundle-symbolic-name" value="org.eclipse.jetty.websocket.javax.websocket"/>
+      <attribute name="bundle-version" type="Version" value="9.3.10.v20160621"/>
+      <directive name="uses" value="javax.websocket,org.eclipse.jetty.websocket.api,org.eclipse.jetty.websocket.common.events,org.eclipse.jetty.websocket.common.message,org.eclipse.jetty.websocket.jsr356,org.eclipse.jetty.websocket.jsr356.endpoints"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="org.eclipse.jetty.websocket.jsr356.metadata"/>
+      <attribute name="version" type="Version" value="9.3.10"/>
+      <attribute name="bundle-symbolic-name" value="org.eclipse.jetty.websocket.javax.websocket"/>
+      <attribute name="bundle-version" type="Version" value="9.3.10.v20160621"/>
+      <directive name="uses" value="javax.websocket,org.eclipse.jetty.websocket.api,org.eclipse.jetty.websocket.jsr356"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="org.eclipse.jetty.websocket.jsr356.utils"/>
+      <attribute name="version" type="Version" value="9.3.10"/>
+      <attribute name="bundle-symbolic-name" value="org.eclipse.jetty.websocket.javax.websocket"/>
+      <attribute name="bundle-version" type="Version" value="9.3.10.v20160621"/>
+    </capability>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=org.eclipse.jetty.io)(version&gt;=9.3.10)(!(version&gt;=9.3.11)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=org.eclipse.jetty.util)(version&gt;=9.3.10)(!(version&gt;=9.3.11)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=org.eclipse.jetty.util.component)(version&gt;=9.3.10)(!(version&gt;=9.3.11)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=org.eclipse.jetty.util.log)(version&gt;=9.3.10)(!(version&gt;=9.3.11)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=org.eclipse.jetty.util.ssl)(version&gt;=9.3.10)(!(version&gt;=9.3.11)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=org.eclipse.jetty.util.thread)(version&gt;=9.3.10)(!(version&gt;=9.3.11)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=org.eclipse.jetty.websocket.api)(version&gt;=9.3.10)(!(version&gt;=9.3.11)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=org.eclipse.jetty.websocket.api.extensions)(version&gt;=9.3.10)(!(version&gt;=9.3.11)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=org.eclipse.jetty.websocket.api.util)(version&gt;=9.3.10)(!(version&gt;=9.3.11)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=org.eclipse.jetty.websocket.client)(version&gt;=9.3.10)(!(version&gt;=9.3.11)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=org.eclipse.jetty.websocket.client.io)(version&gt;=9.3.10)(!(version&gt;=9.3.11)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=org.eclipse.jetty.websocket.common)(version&gt;=9.3.10)(!(version&gt;=9.3.11)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=org.eclipse.jetty.websocket.common.events)(version&gt;=9.3.10)(!(version&gt;=9.3.11)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=org.eclipse.jetty.websocket.common.events.annotated)(version&gt;=9.3.10)(!(version&gt;=9.3.11)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=org.eclipse.jetty.websocket.common.frames)(version&gt;=9.3.10)(!(version&gt;=9.3.11)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=org.eclipse.jetty.websocket.common.io)(version&gt;=9.3.10)(!(version&gt;=9.3.11)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=org.eclipse.jetty.websocket.common.message)(version&gt;=9.3.10)(!(version&gt;=9.3.11)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=org.eclipse.jetty.websocket.common.scopes)(version&gt;=9.3.10)(!(version&gt;=9.3.11)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=org.eclipse.jetty.websocket.common.util)(version&gt;=9.3.10)(!(version&gt;=9.3.11)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=javax.websocket)(version&gt;=1.0.0)(!(version&gt;=2.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.ee">
+      <directive name="filter" value="(&amp;(osgi.ee=JavaSE)(version=1.8))"/>
+    </requirement>
+    <requirement namespace="osgi.ee">
+      <directive name="filter" value="(&amp;(osgi.ee=JavaSE)(version=1.8))"/>
+    </requirement>
   </resource>
 </repository>

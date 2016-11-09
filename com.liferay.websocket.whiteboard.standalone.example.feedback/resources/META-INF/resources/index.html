@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Chat with Cristina González about Websockets in MOD-CONF</title>
+        <title>Chat with Cristina Gonzalez about Websockets in MOD-CONF</title>
         <link rel="stylesheet" href="css/reset.css">
         <link rel="stylesheet prefetch" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="css/style.css">   
@@ -76,7 +76,7 @@
                 if ( websocket && websocket.readyState == 1 )
                     websocket.close();
                 
-                websocket = new WebSocket("ws://192.168.40.190:8090/websocket/chat?userName=" + name + "");
+                websocket = new WebSocket("ws://java.websocket-whiteboard-example.wedeploy.io/websocket/chat?userName=" + name + "");
                 
                 websocket.onopen = function (evt) {  
                     document.getElementById("join-room").style.display = "none";

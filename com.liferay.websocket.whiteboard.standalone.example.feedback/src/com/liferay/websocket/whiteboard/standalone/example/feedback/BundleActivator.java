@@ -1,6 +1,11 @@
 package com.liferay.websocket.whiteboard.standalone.example.feedback;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -36,10 +41,19 @@ public class BundleActivator implements org.osgi.framework.BundleActivator {
 	
 	@Override
 	public void start(BundleContext bundleContext) throws Exception {
-        Server server = new Server(8090);
+        Server server = new Server(8080);
         
-        String resourcesPath = new File("./resources/META-INF/resources").getAbsolutePath();
+        File tempDir = File.createTempFile("tmp", ".txt").getParentFile();
         
+        System.out.println("Dir: " + tempDir.getAbsolutePath());
+        
+        String resourcesPath = tempDir.getAbsolutePath();
+        
+        fileFromResource(bundleContext, resourcesPath, "/META-INF/resources", "index.html");
+        fileFromResource(bundleContext, resourcesPath, "/META-INF/resources", "css/reset.css");
+        fileFromResource(bundleContext, resourcesPath, "/META-INF/resources", "css/style.css");
+        fileFromResource(bundleContext, resourcesPath, "/META-INF/resources", "images/avatar-animals.png");
+              
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         servletContextHandler.setBaseResource(Resource.newResource(resourcesPath));
         
@@ -97,6 +111,40 @@ public class BundleActivator implements org.osgi.framework.BundleActivator {
 		
 		bundleContext.ungetService(websocketServiceRegistration.getReference());	
 	}	
+	
+	private void fileFromResource(BundleContext bundleContext, String tempPath, String originalFolder, String path) {
+		try {
+	        URL url = bundleContext.getBundle().getEntry(originalFolder + "/" + path);
+	        	
+			System.out.println("Resources " + url);
+			
+			InputStream is = url.openStream();
+			
+			File f = new File(tempPath + "/" + path);
+			
+			f.getParentFile().mkdir();
+			
+			OutputStream os = new FileOutputStream(f);
+			
+			byte[] buffer = new byte[1024];
+	        int bytesRead;
+	        
+	        //read from is to buffer
+	        while((bytesRead = is.read(buffer)) !=-1){
+	            os.write(buffer, 0, bytesRead);
+	        }
+	        
+	        is.close();
+	        //flush OutputStream to write any buffered data to file
+	        os.flush();
+	        os.close();
+		} 
+		catch (IOException e) {
+            e.printStackTrace();
+        }
+
+		
+	}
 
 }
 
