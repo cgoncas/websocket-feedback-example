@@ -5,15 +5,16 @@
         <link rel="stylesheet prefetch" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="css/style.css">   
         <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <link rel="stylesheet" href="css/bootstrap.min.css">
     </head>
     <body>
-     <div class="container clearfix">
-     	<div class="people-list" id="people-list">
+     <div class="container">
+     	<div class="people-list col-md-3 visible-md visible-lg" id="people-list">
      		<ul class = "list">
      		</ul>
      	</div>
      
-        <div class="chat">
+        <div class="chat col-md-9">
         	<div class="chat-header clearfix">
         		<div class="chat-about">
         			<div class="chat-with">Chat with Cristina Gonzalez about Websockets in MOD-CONF</div>
@@ -25,13 +26,13 @@
 			</div>
         	 
 	        <div id="send-message" class="chat-message clearfix" style="display: none;">
-	        	<textarea name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="3" onkeydown="if(event.keyCode==13)sendMessage();"></textarea>
-	        	<button onClick="sendMessage();">Send</button>
+	        	<textarea class="col-xs-9" name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="3" onkeydown="if(event.keyCode==13)sendMessage();"></textarea>
+	        	<button class="col-xs-3 btn btn-info" onClick="sendMessage();">Send</button>
 			</div>
 			
 			<div id="join-room" class="chat-message clearfix">
-	        	<input name="name" id="name" placeholder ="Type your Name" rows="3" onkeydown="if(event.keyCode==13)initWebSocket();"></input>
-	        	<button onClick="initWebSocket();">Join</button>
+	        	<input class="col-xs-9" name="name" id="name" placeholder ="Type your Name" rows="3" onkeydown="if(event.keyCode==13)initWebSocket();"></input>
+	        	<button class="col-xs-3 btn btn-info" onClick="initWebSocket();">Join</button>
 			</div>
 			
 		</div>
@@ -213,7 +214,7 @@
             
             divStatus.appendChild(icon);
             
-            divStatus.appendChild(document.createTextNode("online"));
+            divStatus.appendChild(document.createTextNode(" online"));
             
             div.appendChild(divStatus);       
         }

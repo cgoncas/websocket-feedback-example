@@ -50,6 +50,7 @@ public class BundleActivator implements org.osgi.framework.BundleActivator {
         fileFromResource(bundleContext, resourcesPath, "/META-INF/resources", "index.html");
         fileFromResource(bundleContext, resourcesPath, "/META-INF/resources", "css/reset.css");
         fileFromResource(bundleContext, resourcesPath, "/META-INF/resources", "css/style.css");
+        fileFromResource(bundleContext, resourcesPath, "/META-INF/resources", "css/bootstrap.min.css");
         fileFromResource(bundleContext, resourcesPath, "/META-INF/resources", "images/avatar-animals.png");
               
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
