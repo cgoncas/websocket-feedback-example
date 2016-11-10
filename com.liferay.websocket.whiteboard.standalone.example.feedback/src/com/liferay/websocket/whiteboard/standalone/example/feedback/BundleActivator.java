@@ -45,8 +45,6 @@ public class BundleActivator implements org.osgi.framework.BundleActivator {
         
         File tempDir = File.createTempFile("tmp", ".txt").getParentFile();
         
-        System.out.println("Dir: " + tempDir.getAbsolutePath());
-        
         String resourcesPath = tempDir.getAbsolutePath();
         
         fileFromResource(bundleContext, resourcesPath, "/META-INF/resources", "index.html");
@@ -66,7 +64,7 @@ public class BundleActivator implements org.osgi.framework.BundleActivator {
             
         server.setHandler(contextHandlerCollection);
     
-		WebSocketServerContainerInitializer.configureContext(servletContextHandler);
+		WebSocketServerContainerInitializer.configureContext(servletContextHandler).setDefaultMaxSessionIdleTimeout(10000000);;
         
 		Dictionary<String, Object> serverProps = new Hashtable<String, Object>();
         serverProps.put("managedServerName", "websocket-server");
