@@ -1,5 +1,7 @@
 package com.liferay.websocket.whiteboard.standalone.example.feedback;
 
+import com.liferay.websocket.whiteboard.standalone.example.feedback.chat.MessageImpl;
+import com.liferay.websocket.whiteboard.standalone.example.feedback.chat.PeerImpl;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -25,63 +27,50 @@ import com.liferay.websocket.whiteboard.standalone.example.feedback.chat.Peer;
  */
 public class ChatWebSocketEndpoint extends Endpoint {
 
-	private static Map<Session, Peer> peers = new ConcurrentHashMap<>();
+	private static Map<Peer, Session> peers = new ConcurrentHashMap<>();
 	
 	private static final Logger logger = Logger.getLogger(ChatWebSocketEndpoint.class.getName());
 
 	@Override
-	public void onOpen(final Session session, EndpointConfig endpointConfig) {		
+	public void onOpen(final Session session, EndpointConfig endpointConfig) {
 		List<String> userNames = session.getRequestParameterMap().get("userName");
 
-		String userName = userNames.get(0);
-
-		sendMessage(session, welcomeMessage(userName));
-		
-		Peer peer = new Peer();
-		
-		peer.setName(userName);
-		peer.setSession(session);
-		peer.setAvatar(Message.AVATARS[(new Random()).nextInt(Message.AVATARS.length)]);
-
-		System.out.println(userName + " join the chat room.");
-		
-		Message joinMessage = joinMessage(userName);
-
-		Message peerMessage = addPeer(peer);
-
-		for (Peer peerValue : peers.values()) {
-			sendMessage(peerValue.getSession(), joinMessage);
-			sendMessage(peerValue.getSession(), peerMessage);
-			sendMessage(session, addPeer(peerValue));
-		}
-		
-		sendMessage(session, addPeer(peer));
-
-		peers.put(session, peer);
-		
-		session.addMessageHandler(new MessageHandler.Whole<Message>() {
-
+		session.addMessageHandler( new MessageHandler.Whole<Message>() {
+			
 			@Override
 			public void onMessage(Message message) {
-				for (Session peerSession : peers.keySet()) {
-					sendMessage(peerSession, message);
+				for (Map.Entry<Peer, Session> peerEntry : peers.entrySet()) {
+					sendMessage(peerEntry.getValue(), message);
 				}
 			}
 		});
+
+		Peer peer = new PeerImpl(
+			userNames.get(0),
+			Message.AVATARS[(new Random()).nextInt(Message.AVATARS.length)],
+			session.getId());
+
+		sendJoinMessages(session, peer);
 	}
 
 	@Override
 	public void onClose(Session session, CloseReason closeReason) {
-		Peer peer = peers.get(session);
+		Peer peer = getPeer(session);
 
-		System.out.println(peer.getName() + " left the room");
-		
-		peers.remove(session);
+		System.out.println(peer.getName() + " left the room " + closeReason.getReasonPhrase());
 
-		for (Session peerSession : peers.keySet()) {
-			sendMessage(peerSession, leftMessage(peer.getName()));
+		peers.remove(peer);
 
-			sendMessage(peerSession, removePeer(peer));
+		for (Session peerSession : peers.values()) {
+			sendMessage(
+				peerSession,
+				MessageImpl.getSimpleMessage(
+				peer.getName(),
+				new Date(),
+				peer.getName() + " left the MODCONF Presentation Chat"));
+
+			sendMessage(
+				peerSession, MessageImpl.getRemovePeerMessage(peer));
 		}
 	}
 	
@@ -89,61 +78,49 @@ public class ChatWebSocketEndpoint extends Endpoint {
 		try {
 			session.getBasicRemote().sendObject(message);
 		} 
-		catch (IOException ie) {			
+		catch (IOException ie) {
 			logger.log(Level.SEVERE , "Can't send the message " + message, ie);
-		} catch (EncodeException ee) {
+		}
+		catch (EncodeException ee) {
 			logger.log(Level.SEVERE , ee.getMessage(), ee);
 		}
 	}
-	
-	private static Message addPeer(Peer peer) {
-		Message message = new Message(Message.ADD_PEER);
-		
-		message.setPeer(peer.getName());
-		message.setAvatar(peer.getAvatar());
-		message.setSession(peer.getSession().getId());
 
-		return message;
-	}
-	
-	private static Message removePeer(Peer peer) {
-		Message message = new Message(Message.REMOVE_PEER);
-		
-		message.setPeer(peer.getName());
-		message.setAvatar(peer.getAvatar());
-		message.setSession(peer.getSession().getId());
+	private static Peer getPeer(Session session) {
+		for (Map.Entry<Peer, Session> peerEntry : peers.entrySet()) {
+			if (session.getId().equals(peerEntry.getValue().getId())) {
+				return peerEntry.getKey();
+			}
+		}
 
-		return message;
+		return null;
 	}
 
-	private static Message welcomeMessage(String userName) {
-		Message message = new Message(Message.MESSAGE);
+	private void sendJoinMessages(Session session, Peer peer) {
+		sendMessage(
+			session,
+			MessageImpl.getSimpleMessage(
+				"System", new Date(), "Welcome " + peer.getName()));
 
-		message.setContent("Welcome " + userName);
-		message.setSender("@CGCastellano");
-		message.setReceived(new Date());
+		System.out.println(peer.getName() + " join the chat room.");
 
-		return message;
+		for (Map.Entry<Peer, Session> peerEntry : peers.entrySet()) {
+			sendMessage(
+				peerEntry.getValue(),
+				MessageImpl.getSimpleMessage(
+					peer.getName(),
+					new Date(),
+					peer.getName() + " join the MODCONF Presentation Chat"));
+
+			sendMessage(
+				peerEntry.getValue(), MessageImpl.getAddPeerMessage(peer));
+
+			sendMessage(session, MessageImpl.getAddPeerMessage(peerEntry.getKey()));
+		}
+
+		sendMessage(session, MessageImpl.getAddPeerMessage(peer));
+
+		peers.put(peer, session);
 	}
 
-	private static Message leftMessage(String userName) {
-		Message message = new Message(Message.MESSAGE);
-
-		message.setContent(userName + " left the MODCONF Presentation Chat");
-		message.setSender(userName);
-		message.setReceived(new Date());
-
-		return message;
-	}
-
-	private static Message joinMessage(String userName) {
-		Message message = new Message(Message.MESSAGE);
-
-		message.setContent(userName + " join the MODCONF Presentation Chat");
-		message.setSender(userName);
-		message.setReceived(new Date());
-
-		return message;
-	}
-	
 }

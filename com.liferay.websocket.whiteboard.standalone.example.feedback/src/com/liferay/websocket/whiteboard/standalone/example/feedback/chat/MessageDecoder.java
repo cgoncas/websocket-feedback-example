@@ -14,32 +14,43 @@ public class MessageDecoder implements Decoder.Text<Message> {
 	
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("EEE h:mm a"); 
 
-    @Override
-    public Message decode(final String textMessage) throws DecodeException {
+	@Override
+	public Message decode(final String textMessage) throws DecodeException {
 
-        JsonObject jsonObject = Json.createReader(new StringReader(textMessage)).readObject();
+		JsonObject jsonObject = Json.createReader(new StringReader(textMessage)).readObject();
 
-        Message message = new Message(jsonObject.getString("type"));
-        
-        if (Message.MESSAGE.equals(message.getType())) { 
-	        message.setContent(jsonObject.getString("message"));
-	        message.setSender(jsonObject.getString("sender"));
-	        
-	        try {
-				message.setReceived(dateFormat.parse(jsonObject.getString("received")));
-			} catch (Exception e) {
-				message.setReceived(new Date());
+		String type = jsonObject.getString("type");
+		
+		if (Message.MESSAGE.equals(type)) {
+			Date received = new Date();
+			
+			try {
+				received = dateFormat.parse(jsonObject.getString("received"));
 			}
-        }
-        
-        else if (Message.ADD_PEER.equals(message.getType()) || Message.REMOVE_PEER.equals(message.getType())) { 
-        	message.setPeer(jsonObject.getString("peer"));
-        	message.setAvatar(jsonObject.getString("avatar"));
-        	message.setSession(jsonObject.getString("session"));
-        }
-        
-        return message;
-    }
+			catch (Exception e) {
+			}
+
+			return MessageImpl.getSimpleMessage(
+				jsonObject.getString("sender"),
+				received, jsonObject.getString("message"));
+		}
+		else if (Message.ADD_PEER.equals(type)) {
+			return MessageImpl.getAddPeerMessage(
+				new PeerImpl(
+					jsonObject.getString("peer"),
+					jsonObject.getString("avatar"),
+					jsonObject.getString("session")));
+		}
+		else if (Message.REMOVE_PEER.equals(type)) {
+			return MessageImpl.getRemovePeerMessage(
+				new PeerImpl(
+					jsonObject.getString("peer"),
+					jsonObject.getString("avatar"),
+					jsonObject.getString("session")));
+		}
+
+		throw new DecodeException(textMessage, "The type " + type + " is not a valid Message type");
+	}
 
 	@Override
 	public void destroy() {

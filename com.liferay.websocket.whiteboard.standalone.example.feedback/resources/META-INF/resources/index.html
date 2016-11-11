@@ -1,6 +1,8 @@
 <html>
     <head>
         <title>Chat with Cristina Gonzalez about Websockets in MOD-CONF</title>
+        <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32" />
+        <link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16" />
         <link rel="stylesheet" href="css/reset.css">
         <link rel="stylesheet prefetch" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="css/style.css">   
@@ -9,34 +11,36 @@
     </head>
     <body>
      <div class="container">
-     	<div class="people-list col-md-3 visible-md visible-lg" id="people-list">
-     		<ul class = "list">
-     		</ul>
-     	</div>
+         <div class="people-list col-md-3 visible-md visible-lg" id="people-list">
+             <ul class = "list">
+             </ul>
+         </div>
      
         <div class="chat col-md-9">
-        	<div class="chat-header clearfix">
-        		<div class="chat-about">
-        			<div class="chat-with">Chat with Cristina Gonzalez about Websockets in MOD-CONF</div>
-        		</div>
-        	</div>
-        	
-        	<div class="chat-history">
-		    	<ul id="chat-history"/>
-			</div>
-        	 
-	        <div id="send-message" class="chat-message clearfix" style="display: none;">
-	        	<textarea class="col-xs-9" name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="3" onkeydown="if(event.keyCode==13)sendMessage();"></textarea>
-	        	<button class="col-xs-3 btn btn-info" onClick="sendMessage();">Send</button>
-			</div>
-			
-			<div id="join-room" class="chat-message clearfix">
-	        	<input class="col-xs-9" name="name" id="name" placeholder ="Type your Name" rows="3" onkeydown="if(event.keyCode==13)initWebSocket();"></input>
-	        	<button class="col-xs-3 btn btn-info" onClick="initWebSocket();">Join</button>
-			</div>
-			
-		</div>
-	</div>
+            <div class="chat-header clearfix">
+                <div class="chat-about">
+                    <img src="images/cristina.png" alt="Cristina phono">
+                    <div class="chat-with">Chat with Cristina Gonzalez about Websockets</div>
+                    <div class="chat-num-messages">already 0 messages</div>
+                </div>
+            </div>
+            
+            <div class="chat-history">
+                <ul id="chat-history"/>
+            </div>
+             
+            <div id="send-message" class="chat-message clearfix" style="display: none;">
+                <textarea class="col-xs-9" name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="3" onkeydown="if(event.keyCode==13)sendMessage();"></textarea>
+                <button class="col-xs-3 btn btn-info" onClick="sendMessage();">Send</button>
+            </div>
+            
+            <div id="join-room" class="chat-message clearfix">
+                <input class="col-xs-9" name="name" id="name" placeholder ="Type your Name" rows="3" onkeydown="if(event.keyCode==13)initWebSocket();"></input>
+                <button id="btn-join" class="col-xs-3 btn btn-info" onClick="initWebSocket();">Join</button>
+            </div>
+            
+        </div>
+    </div>
 
     <script type="text/javascript">
     
@@ -53,22 +57,24 @@
                 console.log( "string sent :", '"'+JSON.stringify(jsonMsg)+'"' );
             }
             else {
-            	console.log("Can't sent message, the connection is not open");
+                console.log("Can't sent message, the connection is not open");
             }
         }
 
         var websocket = null;
 
         function initWebSocket() {
+            document.getElementById('btn-join').disabled = "true";
+        
             name = document.getElementById("name").value;
         
-        	if (name == null || name == "") {
-        		alert("Is not possible to Join the Chat without a name");
-        		
-        		console.log("Is not possible to Join the Chat without a name");
-        		
-        		return;
-        	}
+            if (name == null || name == "") {
+                alert("Is not possible to Join the Chat without a name");
+                
+                console.log("Is not possible to Join the Chat without a name");
+                
+                return;
+            }
         
             try {
                 if (typeof MozWebSocket == 'function')
@@ -77,7 +83,7 @@
                 if ( websocket && websocket.readyState == 1 )
                     websocket.close();
                 
-                websocket = new WebSocket("ws://java.websocket-whiteboard-example.wedeploy.io/websocket/chat?userName=" + name + "");
+                websocket = new WebSocket("ws://java.websockets.wedeploy.io/websocket/chat?userName=" + name + "");
                 
                 websocket.onopen = function (evt) {  
                     document.getElementById("join-room").style.display = "none";
@@ -96,13 +102,21 @@
                     var msg = JSON.parse(evt.data);
                     
                     if (msg.type == "message") {
-                       addMessageToHistory(document.getElementById("chat-history"), msg)                
+                       addMessageToHistory(document.getElementById("chat-history"), msg);
+                       
+                       var numMessages = document.getElementsByClassName('chat-num-messages')[0].textContent.match(/\d+/);
+                       
+                       numMessages++;
+                       
+                       document.getElementsByClassName('chat-num-messages')[0].textContent = "already " + numMessages + " messages";
+                       
+                       console.log("Messages: " + numMessages);                       
                     }
                     else if (msg.type == "add-peer") {
-	                    addPeerToList(document.getElementsByClassName("list")[0], msg);
+                        addPeerToList(document.getElementsByClassName("list")[0], msg);
                     }
-                     else if (msg.type == "remove-peer") {
-	                    removePeerFromList(document.getElementsByClassName("list")[0], msg);
+                    else if (msg.type == "remove-peer") {
+                        removePeerFromList(document.getElementsByClassName("list")[0], msg);
                     }
                     
                 };
@@ -119,20 +133,15 @@
         var peerswebsocket = null;
         
         function addMessageToHistory(chatHistory, message) {
-        	console.log("NAME " + name);
+            console.log("NAME " + name);
         
-        	var li = document.createElement("li");
+            var li = document.createElement("li");
             li.className = "clearfix";
             
             var messages = chatHistory.childNodes;
             
-            if (messages.length > 0) {
-            	chatHistory.insertBefore(li, chatHistory.childNodes[0]);
-            }
-            else {
-            	chatHistory.appendChild(li);
-            }
-  
+            chatHistory.appendChild(li);
+
             var div = document.createElement("div");
             div.className="message-data align-right";
             
@@ -143,61 +152,63 @@
             time.appendChild(document.createTextNode(message.received + " "));
             
             var userName = document.createElement("span");
-          	userName.className="message-data-name";
+            userName.className="message-data-name";
             userName.appendChild(document.createTextNode(message.sender + " "));
                     
             var icon = document.createElement("i");
             
             if(message.sender != name) {     
-	            icon.className="fa fa-circle me";
-	            userName.appendChild(icon);
-	            
-		        div.appendChild(userName);
-		        div.appendChild(time);
+                icon.className="fa fa-circle me";
+                userName.appendChild(icon);
+                
+                div.appendChild(userName);
+                div.appendChild(time);
             }
-	        else {
-		        icon.className="fa fa-circle online";
-            	icon.appendChild(document.createTextNode(""));
-            	
-            	div.className="message-data";
-            	
-            	div.appendChild(time);
-		        div.appendChild(userName);
-		        div.appendChild(icon);
-	        }
+            else {
+                icon.className="fa fa-circle online";
+                icon.appendChild(document.createTextNode(""));
+                
+                div.className="message-data";
+                
+                div.appendChild(time);
+                div.appendChild(userName);
+                div.appendChild(icon);
+            }
            
-	        div = document.createElement("div");
-	                
-	        if(message.sender == name) {
-	        	div.className="message my-message";
-	        }
-	        else {
+            div = document.createElement("div");
+                    
+            if(message.sender == name) {
+                div.className="message my-message";
+            }
+            else {
                 div.className="message other-message float-right";
             }
                     
             div.appendChild(document.createTextNode(message.message));
-	                    
+                        
             li.appendChild(div);
+            
+            li.scrollIntoView();            
         }
         
         function addPeerToList(peopleList, message) {
-        	var li = document.createElement("li");
+            var li = document.createElement("li");
             li.className = "clearfix";
             li.id = message.session;
                     
             peopleList.appendChild(li);
+                        
+            var div = document.createElement("div");
+            div.className="about";
+            
+            li.appendChild(div);
             
             var img = document.createElement("div");
             
             img.className = message.avatar;
             img.alt = message.peer;
             
-            li.appendChild(img);
-            
-            var div = document.createElement("div");
-            div.className="about";
-            
-            li.appendChild(div);
+            div.appendChild(img);
             
             var divName = document.createElement("div");
             divName.className="name";
@@ -210,7 +221,7 @@
             
             var icon = document.createElement("i");
  
-			icon.className="fa fa-circle online";
+            icon.className="fa fa-circle online";
             
             divStatus.appendChild(icon);
             
@@ -220,7 +231,7 @@
         }
         
         function removePeerFromList(peopleList, message) {
-        	peopleList.removeChild(document.getElementById(message.session));
+            peopleList.removeChild(document.getElementById(message.session));
         }
         
         function stopWebSocket() {
